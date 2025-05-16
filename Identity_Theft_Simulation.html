@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Identity Theft Simulation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      background: #01010a;
+      color: #00e5ff;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #00ffaa;
+      text-shadow: 0 0 10px #00ffaa88;
+    }
+
+    .container {
+      display: flex;
+      gap: 40px;
+      margin-top: 20px;
+    }
+
+    .panel {
+      background: #0b0f1e;
+      border: 1px solid #00ffaa33;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #00ffaa44;
+      padding: 20px;
+      width: 500px;
+      height: 500px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      font-size: 14px;
+    }
+
+    .title {
+      font-weight: bold;
+      color: #00ffee;
+      margin-bottom: 10px;
+    }
+
+    .log-line {
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .done {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #aaffaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Identity Theft Simulation</h1>
+  <div class="container">
+    <div class="panel" id="attackerPanel">
+      <div class="title">🧑‍💻 Attacker Actions</div>
+    </div>
+    <div class="panel" id="victimPanel">
+      <div class="title">🧑‍💼 Victim Activity</div>
+    </div>
+  </div>
+  <div class="done" id="doneNotice" style="display: none;">
+    ⚠️ Identity theft sequence complete.
+  </div>
+
+  <script>
+    const attackerSteps = [
+      "Scanning social networks for public data...",
+      "[+] Found DOB, email, and phone from LinkedIn",
+      "Deploying phishing email: 'Verify your account now'",
+      "[✓] Email opened, fake login page active",
+      "Intercepting credentials: user@example.com / ********",
+      "[~] Logging into online banking...",
+      "[✓] Access granted",
+      "Selling identity on dark web...",
+      "[!] Full identity: Name, DOB, SSN, Address listed for $15"
+    ];
+
+    const victimSteps = [
+      "📧 New email: 'Your account needs verification'",
+      "[!] Clicked link → redirected to login",
+      "Entered credentials on fake site",
+      "[~] No confirmation received...",
+      "🔔 Bank notification: Login from new device",
+      "[!] Password changed without permission",
+      "🚨 Alert: New credit line opened",
+      "Identity theft suspected – reporting incident"
+    ];
+
+    function appendLogs(panelId, steps, delay = 1500) {
+      const panel = document.getElementById(panelId);
+      steps.forEach((text, i) => {
+        setTimeout(() => {
+          const line = document.createElement('div');
+          line.className = 'log-line';
+          line.style.animationDelay = `${i * 0.3}s`;
+          line.textContent = text;
+          panel.appendChild(line);
+          panel.scrollTop = panel.scrollHeight;
+        }, i * delay);
+      });
+    }
+
+    function runSimulation() {
+      document.getElementById('attackerPanel').innerHTML = '<div class="title">🧑‍💻 Attacker Actions</div>';
+      document.getElementById('victimPanel').innerHTML = '<div class="title">🧑‍💼 Victim Activity</div>';
+      document.getElementById('doneNotice').style.display = 'none';
+      appendLogs('attackerPanel', attackerSteps, 1500);
+      appendLogs('victimPanel', victimSteps, 1600);
+
+      setTimeout(() => {
+        document.getElementById('doneNotice').style.display = 'block';
+      }, (attackerSteps.length + 2) * 1500);
+    }
+
+    runSimulation();
+    setInterval(runSimulation, (attackerSteps.length + 2) * 1500 + 8000);
+  </script>
+</body>
+</html>
