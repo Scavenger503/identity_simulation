@@ -1,134 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Identity Theft Simulation</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       margin: 0;
-      background: #01010a;
-      color: #00e5ff;
+      background-color: #000;
       font-family: 'Courier New', Courier, monospace;
-      padding: 20px;
+      color: #00ffe7;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
+      height: 100vh;
     }
 
-    h1 {
-      color: #00ffaa;
-      text-shadow: 0 0 10px #00ffaa88;
-    }
-
-    .container {
-      display: flex;
-      gap: 40px;
-      margin-top: 20px;
-    }
-
-    .panel {
-      background: #0b0f1e;
-      border: 1px solid #00ffaa33;
-      border-radius: 10px;
-      box-shadow: 0 0 20px #00ffaa44;
+    .terminal {
+      background-color: #111;
+      border: 2px solid #00ffe7;
+      box-shadow: 0 0 40px #00ffe7;
+      border-radius: 12px;
       padding: 20px;
-      width: 500px;
-      height: 500px;
+      width: 90%;
+      max-width: 800px;
+      height: 400px;
       overflow-y: auto;
-      white-space: pre-wrap;
       font-size: 14px;
+      line-height: 1.6;
     }
 
-    .title {
-      font-weight: bold;
-      color: #00ffee;
-      margin-bottom: 10px;
-    }
-
-    .log-line {
+    .line {
       opacity: 0;
-      animation: fadeIn 1s forwards;
+      animation: fadeIn 0.5s ease forwards;
     }
 
     @keyframes fadeIn {
       to { opacity: 1; }
     }
-
-    .done {
-      text-align: center;
-      margin-top: 20px;
-      font-weight: bold;
-      color: #aaffaa;
-    }
   </style>
 </head>
 <body>
-  <h1>Identity Theft Simulation</h1>
-  <div class="container">
-    <div class="panel" id="attackerPanel">
-      <div class="title">🧑‍💻 Attacker Actions</div>
-    </div>
-    <div class="panel" id="victimPanel">
-      <div class="title">🧑‍💼 Victim Activity</div>
-    </div>
-  </div>
-  <div class="done" id="doneNotice" style="display: none;">
-    ⚠️ Identity theft sequence complete.
-  </div>
+  <div id="terminal" class="terminal"></div>
 
   <script>
-    const attackerSteps = [
-      "Scanning social networks for public data...",
-      "[+] Found DOB, email, and phone from LinkedIn",
-      "Deploying phishing email: 'Verify your account now'",
-      "[✓] Email opened, fake login page active",
-      "Intercepting credentials: user@example.com / ********",
-      "[~] Logging into online banking...",
-      "[✓] Access granted",
-      "Selling identity on dark web...",
-      "[!] Full identity: Name, DOB, SSN, Address listed for $15"
+    const terminal = document.getElementById("terminal");
+
+    const messages = [
+      "[Info] Connecting to unsecured Wi-Fi hotspot...",
+      "[!] No encryption detected on network.",
+      "[✓] Packet sniffing enabled.",
+      "[>] Capturing login session from victim device...",
+      "[✓] Session hijacked successfully.",
+      "[>] Extracting credentials: email + password...",
+      "[✓] Found: user@example.com / ********",
+      "[>] Accessing password manager data...",
+      "[✓] Retrieved saved SSN, DOB, and address info.",
+      "[>] Compiling full identity package...",
+      "[✓] Packaging data: banking, medical, insurance...",
+      "[>] Uploading to dark web market...",
+      "[✓] Identity profile sold: $92.00 USD",
+      "[✔] Identity theft complete. Closing session..."
     ];
 
-    const victimSteps = [
-      "📧 New email: 'Your account needs verification'",
-      "[!] Clicked link → redirected to login",
-      "Entered credentials on fake site",
-      "[~] No confirmation received...",
-      "🔔 Bank notification: Login from new device",
-      "[!] Password changed without permission",
-      "🚨 Alert: New credit line opened",
-      "Identity theft suspected – reporting incident"
-    ];
-
-    function appendLogs(panelId, steps, delay = 1500) {
-      const panel = document.getElementById(panelId);
-      steps.forEach((text, i) => {
+    function simulateLines() {
+      terminal.innerHTML = "";
+      messages.forEach((msg, i) => {
         setTimeout(() => {
-          const line = document.createElement('div');
-          line.className = 'log-line';
-          line.style.animationDelay = `${i * 0.3}s`;
-          line.textContent = text;
-          panel.appendChild(line);
-          panel.scrollTop = panel.scrollHeight;
-        }, i * delay);
+          const line = document.createElement("div");
+          line.className = "line";
+          line.style.animationDelay = `${i * 0.5}s`;
+          line.textContent = msg;
+          terminal.appendChild(line);
+          terminal.scrollTop = terminal.scrollHeight;
+        }, i * 800);
       });
+
+      // Restart simulation after 5 seconds of last message
+      const totalTime = messages.length * 800 + 5000;
+      setTimeout(simulateLines, totalTime);
     }
 
-    function runSimulation() {
-      document.getElementById('attackerPanel').innerHTML = '<div class="title">🧑‍💻 Attacker Actions</div>';
-      document.getElementById('victimPanel').innerHTML = '<div class="title">🧑‍💼 Victim Activity</div>';
-      document.getElementById('doneNotice').style.display = 'none';
-      appendLogs('attackerPanel', attackerSteps, 1500);
-      appendLogs('victimPanel', victimSteps, 1600);
-
-      setTimeout(() => {
-        document.getElementById('doneNotice').style.display = 'block';
-      }, (attackerSteps.length + 2) * 1500);
-    }
-
-    runSimulation();
-    setInterval(runSimulation, (attackerSteps.length + 2) * 1500 + 8000);
+    simulateLines();
   </script>
 </body>
 </html>
